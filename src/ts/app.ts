@@ -33,8 +33,20 @@ interface Recipe {
   title: string;
 }
 
+const renderSpinner = (parentEl: HTMLElement) =>
+  (parentEl.innerHTML = `
+   <div class="spinner">
+      <svg>
+      <use href="img/icons.svg#icon-loader"></use>
+      </svg>
+   </div>
+  `);
+
 const showRecipe = async () => {
   try {
+    // Render the display while getting recipe
+    renderSpinner(elements.recipeContainer);
+
     // Getting the recipe
     const res = await fetch(
       'https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bca79'
