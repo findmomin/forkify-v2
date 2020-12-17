@@ -1,4 +1,4 @@
-import * as Interfaces from './Interfaces';
+import * as Interfaces from '../Interfaces';
 import * as config from '../config';
 import { getJSON } from '../helpers';
 

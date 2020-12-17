@@ -1,4 +1,4 @@
-import * as Interfaces from './models/Interfaces';
+import * as Interfaces from './Interfaces';
 import * as config from './config';
 
 const timeout = (delay: number) => {

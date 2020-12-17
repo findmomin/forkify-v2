@@ -1,5 +1,5 @@
 import Fraction from 'fraction.js';
-import * as Interfaces from '../models/Interfaces';
+import * as Interfaces from '../Interfaces';
 import { elements } from './base';
 
 export class RecipeView {
