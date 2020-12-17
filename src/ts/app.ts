@@ -8,6 +8,7 @@ import SearchView from './view/searchView';
 // The state
 const state: { recipe?: Recipe; search?: Search } = {};
 
+// The search controller
 const controlSearch = async (e: Event) => {
   e.preventDefault();
 
@@ -33,11 +34,13 @@ const controlSearch = async (e: Event) => {
   }
 };
 
+// The recipe controller
 const controlRecipes = async () => {
   try {
     // Getting the recipe id from the URL
     const recipeId = location.hash.slice(1);
 
+    // If no id then return
     if (!recipeId) return;
 
     // Render the spinner while getting recipe
@@ -50,7 +53,7 @@ const controlRecipes = async () => {
     // Getting the recipe details
     await recipe.getRecipe();
 
-    //  Rendering the recipe
+    // Rendering the recipe
     RecipeView.render(recipe);
   } catch (err) {
     RecipeView.renderError();
