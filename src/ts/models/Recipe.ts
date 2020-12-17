@@ -18,12 +18,12 @@ export class Recipe implements Interfaces.Recipe {
   async getRecipe() {
     try {
       // Getting the recipe
-      const data = await getJSON(`${config.API_URL}/${this.id}`);
+      const json = await getJSON(`${config.API_URL}${this.id}`);
 
       // Pulling the recipe from the data
       const {
         data: { recipe },
-      }: { data: { recipe: Interfaces.Recipe } } = data;
+      }: { data: { recipe: Interfaces.Recipe } } = json;
 
       // Assigning the recipe properties to the class properties
       this.cooking_time = recipe.cooking_time;

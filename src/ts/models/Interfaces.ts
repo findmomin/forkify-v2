@@ -1,3 +1,6 @@
+// Search result Array
+export type SearchResults = RecipePartial[];
+
 // Interface for the recipe Error response
 export interface RecipeErrorResponse {
   message: string;
@@ -19,5 +22,12 @@ export interface Recipe {
   publisher: string;
   servings: number;
   source_url: string;
+  title: string;
+}
+
+export interface RecipePartial {
+  id: string;
+  image_url: string;
+  publisher: string;
   title: string;
 }
