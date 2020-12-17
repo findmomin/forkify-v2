@@ -5,6 +5,9 @@ import { elements } from './base';
 export class RecipeView {
   private parentEl = elements.recipeContainer;
   private data!: Interfaces.Recipe;
+  private errorMessage =
+    'We could not find that recipe. Please try another one!';
+  private message = '';
 
   constructor() {
     //
@@ -38,6 +41,32 @@ export class RecipeView {
          </svg>
       </div>
   `;
+  }
+
+  renderError(message: string = this.errorMessage) {
+    this.parentEl.innerHTML = `
+       <div class="error">
+         <div>
+            <svg>
+               <use href="img/icons.svg#icon-alert-triangle"></use>
+            </svg>
+         </div>
+         <p>${message}</p>
+      </div>
+    `;
+  }
+
+  renderMessage(message: string = this.message) {
+    this.parentEl.innerHTML = `
+       <div class="message">
+         <div>
+            <svg>
+               <use href="img/icons.svg#icon-smile"></use>
+            </svg>
+         </div>
+         <p>${message}</p>
+      </div>
+    `;
   }
 
   private generateMarkup() {

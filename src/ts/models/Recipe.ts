@@ -34,7 +34,7 @@ export class Recipe implements Interfaces.Recipe {
       this.source_url = recipe.source_url;
       this.title = recipe.title;
     } catch (err) {
-      console.error(err);
+      throw err;
     }
   }
 }
