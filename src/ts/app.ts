@@ -54,7 +54,6 @@ const controlRecipes = async () => {
     const clickedResultIndex = state.search
       ?.getSearchResultsPage(state.search!.currentPage)
       .findIndex(el => el.id === recipeId);
-    console.log(clickedResultIndex);
     SearchView.highlightResult(clickedResultIndex!);
 
     // Render the spinner while getting recipe
