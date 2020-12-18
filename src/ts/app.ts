@@ -50,6 +50,13 @@ const controlRecipes = async () => {
     // If no id then return
     if (!recipeId) return;
 
+    // Update the search results view
+    const clickedResultIndex = state.search
+      ?.getSearchResultsPage(state.search!.currentPage)
+      .findIndex(el => el.id === recipeId);
+    console.log(clickedResultIndex);
+    SearchView.highlightResult(clickedResultIndex!);
+
     // Render the spinner while getting recipe
     RecipeView.renderSpinner();
 
@@ -62,6 +69,7 @@ const controlRecipes = async () => {
     // Rendering the recipe
     RecipeView.render(state.recipe);
   } catch (err) {
+    console.log(err);
     RecipeView.renderError();
   }
 };
@@ -97,7 +105,7 @@ const controlServings = (e: Event) => {
   state.recipe!.updateServings(state.recipe!.servings + +btn.dataset.value!);
 
   // Update the view (re-render)
-  RecipeView.render(state.recipe!);
+  RecipeView.update(state.recipe!);
 };
 
 // App initializer

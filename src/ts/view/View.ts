@@ -31,6 +31,30 @@ export default abstract class View {
     this.parentEl.insertAdjacentHTML('afterbegin', markup);
   }
 
+  update(data: Interfaces.Recipe) {
+    if (
+      !data ||
+      (Array.isArray(data) && !(data as Interfaces.SearchResults).length)
+    )
+      return this.renderError();
+
+    this.data = data;
+
+    const newMarkup = this.generateMarkup();
+    const newDOM = document.createRange().createContextualFragment(newMarkup);
+    const newElements = [...newDOM.querySelectorAll('*')];
+    const curElements = [...this.parentEl.querySelectorAll('*')];
+
+    newElements.forEach((newEl, i) => {
+      const curEl = curElements[i];
+
+      // Compare them
+      if (newEl.firstChild?.nodeValue?.trim() && !newEl.isEqualNode(curEl)) {
+        curEl.textContent = newEl.textContent;
+      }
+    });
+  }
+
   clear() {
     this.parentEl.innerHTML = '';
   }

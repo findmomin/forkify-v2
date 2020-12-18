@@ -30,7 +30,7 @@ class SearchView extends View {
       .map(recipe => {
         return `
       <li class="preview">
-        <a class="preview__link " href="#${recipe.id}">
+        <a class="preview__link" href="#${recipe.id}">
           <figure class="preview__fig">
             <img src="${recipe.image_url}" alt="${recipe.title}">
           </figure>
@@ -39,7 +39,7 @@ class SearchView extends View {
             <p class="preview__publisher">${recipe.publisher}</p>
             <div class="preview__user-generated hidden">
               <svg>
-              <use href="img/icons.svg#icon-user"></use>
+                <use href="img/icons.svg#icon-user"></use>
               </svg>
             </div>
           </div>
@@ -48,6 +48,18 @@ class SearchView extends View {
       `;
       })
       .join('');
+  }
+
+  highlightResult(clickedResultIndex: number) {
+    const results = document.querySelectorAll('.preview');
+
+    // Removing all the active classes
+    results?.forEach(result =>
+      result.classList.remove('preview__link--active')
+    );
+
+    // Adding the active class on the clcked result
+    results[clickedResultIndex]?.classList.add('preview__link--active');
   }
 }
 
