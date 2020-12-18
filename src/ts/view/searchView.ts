@@ -9,10 +9,6 @@ class SearchView extends View {
   inputField = elements.searchInput;
   form = elements.searchForm;
 
-  constructor() {
-    super();
-  }
-
   getQuery() {
     const searchQuery = this.inputField.value;
     this.clearInput();
@@ -23,7 +19,7 @@ class SearchView extends View {
     this.inputField.value = '';
   }
 
-  addHandlerSearch(handlerFn: (e: Event) => {}) {
+  addHandlerSearch(handlerFn: (e: Event) => void) {
     this.form.addEventListener('submit', handlerFn);
   }
 

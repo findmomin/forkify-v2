@@ -4,6 +4,7 @@ import { Recipe } from './models/Recipe';
 import { Search } from './models/Search';
 import RecipeView from './view/recipeView';
 import SearchView from './view/searchView';
+import PaginationView from './view/paginationView';
 
 // The state
 const state: { recipe?: Recipe; search?: Search } = {};
@@ -29,7 +30,12 @@ const controlSearch = async (e: Event) => {
     await state.search.getSearchResults();
 
     // Rendering the results
-    SearchView.render(state.search.results);
+    SearchView.render(
+      state.search.getSearchResultsPage(state.search.currentPage)
+    );
+
+    // Rendering the initial pagination buttons
+    PaginationView.render(state.search);
   } catch (err) {
     SearchView.renderError();
   }
@@ -61,6 +67,24 @@ const controlRecipes = async () => {
   }
 };
 
+// Pagination buttons controller
+const controlPagination = (e: Event) => {
+  const btn = (e.target as HTMLElement).closest(
+    '.btn--inline'
+  ) as HTMLButtonElement;
+
+  if (!btn) return;
+
+  // Updating the current page
+  state.search!.currentPage += +btn.dataset.value!;
+
+  // Re-rendering the results and btns
+  SearchView.render(
+    state.search!.getSearchResultsPage(state.search!.currentPage)
+  );
+  PaginationView.render(state.search!);
+};
+
 // App initializer
 const init = async () => {
   // Handler for the search
@@ -68,6 +92,9 @@ const init = async () => {
 
   // Handler for the recipe
   RecipeView.addHandlerRender(controlRecipes);
+
+  // Handler for the pagination btns click
+  PaginationView.addHandlerClick(controlPagination);
 };
 
 init();

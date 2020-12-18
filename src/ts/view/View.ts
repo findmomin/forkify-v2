@@ -1,7 +1,8 @@
 import * as Interfaces from '../Interfaces';
+import { Search } from '../models/Search';
 
 export default abstract class View {
-  data!: Interfaces.Recipe | Interfaces.SearchResults;
+  data!: Interfaces.Recipe | Interfaces.SearchResults | Search;
   abstract parentEl: HTMLElement;
   abstract errorMessage: string;
   abstract message: string;
@@ -12,7 +13,7 @@ export default abstract class View {
 
   abstract generateMarkup(): string;
 
-  render(data: Interfaces.Recipe | Interfaces.SearchResults) {
+  render(data: Interfaces.Recipe | Interfaces.SearchResults | Search) {
     if (
       !data ||
       (Array.isArray(data) && !(data as Interfaces.SearchResults).length)

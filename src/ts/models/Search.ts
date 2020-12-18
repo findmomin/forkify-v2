@@ -4,6 +4,7 @@ import { getJSON } from '../helpers';
 
 export class Search {
   results!: Interfaces.SearchResults;
+  currentPage = 1;
 
   constructor(public searchQuery: string) {
     //
@@ -26,5 +27,14 @@ export class Search {
     } catch (err) {
       throw err;
     }
+  }
+
+  getSearchResultsPage(page: number = this.currentPage) {
+    const start = (page - 1) * config.RES_PER_PAGE;
+    const end = page * config.RES_PER_PAGE;
+
+    this.currentPage = page;
+
+    return this.results.slice(start, end);
   }
 }
