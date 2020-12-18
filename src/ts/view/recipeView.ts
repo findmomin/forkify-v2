@@ -12,6 +12,10 @@ export class RecipeView extends View {
     ['hashchange', 'load'].forEach(e => window.addEventListener(e, handlerFn));
   }
 
+  addHandlerUpdateServings(handlerFn: (e: Event) => void) {
+    this.parentEl.addEventListener('click', handlerFn);
+  }
+
   generateMarkup() {
     const data = this.data as Interfaces.Recipe;
     return `
@@ -40,12 +44,12 @@ export class RecipeView extends View {
          }</span>
          <span class="recipe__info-text">servings</span>
          <div class="recipe__info-buttons">
-            <button class="btn--tiny btn--increase-servings">
+            <button data-value="-1" class="btn--tiny btn--increase-servings">
                <svg>
                <use href="img/icons.svg#icon-minus-circle"></use>
                </svg>
             </button>
-            <button class="btn--tiny btn--increase-servings">
+            <button data-value="1" class="btn--tiny btn--increase-servings">
                <svg>
                <use href="img/icons.svg#icon-plus-circle"></use>
                </svg>

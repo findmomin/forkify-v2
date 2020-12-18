@@ -37,4 +37,15 @@ export class Recipe implements Interfaces.Recipe {
       throw err;
     }
   }
+
+  updateServings(numberOfServings: number) {
+    if (numberOfServings < 1) return;
+
+    this.ingredients.forEach(
+      ingredient =>
+        (ingredient.quantity =
+          (ingredient.quantity * numberOfServings) / this.servings)
+    );
+    this.servings = numberOfServings;
+  }
 }

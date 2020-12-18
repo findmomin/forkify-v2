@@ -55,19 +55,18 @@ const controlRecipes = async () => {
 
     // Creating the recipe object with the recipe id
     state.recipe = new Recipe(recipeId);
-    const recipe = state.recipe;
 
     // Getting the recipe details
-    await recipe.getRecipe();
+    await state.recipe.getRecipe();
 
     // Rendering the recipe
-    RecipeView.render(recipe);
+    RecipeView.render(state.recipe);
   } catch (err) {
     RecipeView.renderError();
   }
 };
 
-// Pagination buttons controller
+// Pagination buttons controler
 const controlPagination = (e: Event) => {
   const btn = (e.target as HTMLElement).closest(
     '.btn--inline'
@@ -85,13 +84,30 @@ const controlPagination = (e: Event) => {
   PaginationView.render(state.search!);
 };
 
+// Update servings buttons controler
+const controlServings = (e: Event) => {
+  const btn = (e.target as HTMLElement).closest(
+    '.btn--tiny'
+  ) as HTMLButtonElement;
+
+  // If not clicked on the button then return
+  if (!btn) return;
+
+  // Update the servings in the state
+  state.recipe!.updateServings(state.recipe!.servings + +btn.dataset.value!);
+
+  // Update the view (re-render)
+  RecipeView.render(state.recipe!);
+};
+
 // App initializer
 const init = async () => {
   // Handler for the search
   SearchView.addHandlerSearch(controlSearch);
 
-  // Handler for the recipe
+  // Handler for the recipe & update servings
   RecipeView.addHandlerRender(controlRecipes);
+  RecipeView.addHandlerUpdateServings(controlServings);
 
   // Handler for the pagination btns click
   PaginationView.addHandlerClick(controlPagination);
