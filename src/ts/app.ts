@@ -20,6 +20,7 @@ const controlSearch = async (e: Event) => {
     if (!searchQuery) return;
 
     // Render the spinner while getting recipe
+    SearchView.renderSpinner();
 
     // Creating the search object
     state.search = new Search(searchQuery);
@@ -28,9 +29,9 @@ const controlSearch = async (e: Event) => {
     await state.search.getSearchResults();
 
     // Rendering the results
-    console.log(state.search);
+    SearchView.render(state.search.results);
   } catch (err) {
-    // SearchView.renderError();
+    SearchView.renderError();
   }
 };
 

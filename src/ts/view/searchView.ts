@@ -1,12 +1,16 @@
-// import * as Interfaces from '../models/Interfaces';
+import * as Interfaces from '../Interfaces';
 import { elements } from './base';
+import View from './View';
 
-class SearchView {
-  parentEl = elements.searchForm;
+class SearchView extends View {
+  parentEl = elements.resultsContainer;
+  errorMessage = 'No recipes found for your query! Please try again : (';
+  message = '';
   inputField = elements.searchInput;
+  form = elements.searchForm;
 
   constructor() {
-    //
+    super();
   }
 
   getQuery() {
@@ -20,7 +24,34 @@ class SearchView {
   }
 
   addHandlerSearch(handlerFn: (e: Event) => {}) {
-    this.parentEl.addEventListener('submit', handlerFn);
+    this.form.addEventListener('submit', handlerFn);
+  }
+
+  generateMarkup() {
+    const data = this.data as Interfaces.SearchResults;
+
+    return data
+      .map(recipe => {
+        return `
+      <li class="preview">
+        <a class="preview__link " href="#${recipe.id}">
+          <figure class="preview__fig">
+            <img src="${recipe.image_url}" alt="${recipe.title}">
+          </figure>
+          <div class="preview__data">
+            <h4 class="preview__title">${recipe.title}</h4>
+            <p class="preview__publisher">${recipe.publisher}</p>
+            <div class="preview__user-generated hidden">
+              <svg>
+              <use href="img/icons.svg#icon-user"></use>
+              </svg>
+            </div>
+          </div>
+        </a>
+      </li>
+      `;
+      })
+      .join('');
   }
 }
 
