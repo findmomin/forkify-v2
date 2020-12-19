@@ -7,10 +7,6 @@ export default abstract class View {
   abstract errorMessage: string;
   abstract message: string;
 
-  constructor() {
-    //
-  }
-
   abstract generateMarkup(): string;
 
   render(data: Interfaces.Recipe | Interfaces.SearchResults | Search) {

@@ -5,6 +5,7 @@ import { Search } from './models/Search';
 import { Bookmark } from './models/Bookmarks';
 import RecipeView from './view/recipeView';
 import SearchView from './view/searchView';
+import BookmarksView from './view/bookmarksView';
 import PaginationView from './view/paginationView';
 
 // The state
@@ -53,6 +54,9 @@ const controlRecipes = async () => {
 
     // Update the search results view (highlight the selected one)
     SearchView.update(state.search?.getSearchResultsPage()!);
+
+    // Update the bookmarks (highlight the selected one)
+    BookmarksView.render(state.bookmark?.bookmarks!);
 
     // Render the spinner while getting recipe
     RecipeView.renderSpinner();
@@ -124,6 +128,9 @@ const controlBookmark = (e: Event) => {
 
   // Re-render the recipe
   RecipeView.update(state.recipe!);
+
+  // Render bookmarked recipes into the bookmarks
+  BookmarksView.render(state.bookmark.bookmarks);
 };
 
 // App initializer

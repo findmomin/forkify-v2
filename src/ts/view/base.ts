@@ -5,4 +5,7 @@ export const elements = {
   searchInput: document.querySelector('.search__field') as HTMLInputElement,
   resultsContainer: document.querySelector('.results') as HTMLUListElement,
   pagination: document.querySelector('.pagination') as HTMLDivElement,
+  bookmarksContainer: document.querySelector(
+    '.bookmarks__list'
+  ) as HTMLUListElement,
 };
