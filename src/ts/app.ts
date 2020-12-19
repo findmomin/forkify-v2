@@ -9,7 +9,9 @@ import BookmarksView from './view/bookmarksView';
 import PaginationView from './view/paginationView';
 
 // The state
-const state: { recipe?: Recipe; search?: Search; bookmark?: Bookmark } = {};
+const state: { recipe?: Recipe; search?: Search; bookmark: Bookmark } = {
+  bookmark: new Bookmark(),
+};
 
 // The search controller
 const controlSearch = async (e: Event) => {
@@ -147,6 +149,9 @@ const init = async () => {
 
   // Handler for the bookmark btn
   RecipeView.addHandlerAddBookmark(controlBookmark);
+
+  // If theres bookmarks, then render them
+  BookmarksView.render(state.bookmark.bookmarks);
 };
 
 init();
