@@ -23,6 +23,7 @@ export interface Recipe {
   servings: number;
   source_url: string;
   title: string;
+  isBookmarked: boolean;
 }
 
 export interface RecipePartial {

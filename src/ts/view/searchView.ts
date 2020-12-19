@@ -25,12 +25,15 @@ class SearchView extends View {
 
   generateMarkup() {
     const data = this.data as Interfaces.SearchResults;
+    const recipeId = location.hash.slice(1);
 
     return data
-      .map(recipe => {
+      ?.map(recipe => {
         return `
       <li class="preview">
-        <a class="preview__link" href="#${recipe.id}">
+        <a class="preview__link ${
+          recipeId === recipe.id ? 'preview__link--active' : ''
+        }" href="#${recipe.id}">
           <figure class="preview__fig">
             <img src="${recipe.image_url}" alt="${recipe.title}">
           </figure>
@@ -48,18 +51,6 @@ class SearchView extends View {
       `;
       })
       .join('');
-  }
-
-  highlightResult(clickedResultIndex: number) {
-    const results = document.querySelectorAll('.preview');
-
-    // Removing all the active classes
-    results?.forEach(result =>
-      result.classList.remove('preview__link--active')
-    );
-
-    // Adding the active class on the clcked result
-    results[clickedResultIndex]?.classList.add('preview__link--active');
   }
 }
 

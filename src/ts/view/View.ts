@@ -31,13 +31,7 @@ export default abstract class View {
     this.parentEl.insertAdjacentHTML('afterbegin', markup);
   }
 
-  update(data: Interfaces.Recipe) {
-    if (
-      !data ||
-      (Array.isArray(data) && !(data as Interfaces.SearchResults).length)
-    )
-      return this.renderError();
-
+  update(data: Interfaces.Recipe | Interfaces.RecipePartial[]) {
     this.data = data;
 
     const newMarkup = this.generateMarkup();
@@ -45,12 +39,21 @@ export default abstract class View {
     const newElements = [...newDOM.querySelectorAll('*')];
     const curElements = [...this.parentEl.querySelectorAll('*')];
 
+    // Compare them
     newElements.forEach((newEl, i) => {
       const curEl = curElements[i];
 
-      // Compare them
+      // Updates the text
       if (newEl.firstChild?.nodeValue?.trim() && !newEl.isEqualNode(curEl)) {
         curEl.textContent = newEl.textContent;
+        curEl.innerHTML = newEl.innerHTML;
+      }
+
+      // Updates the attributes
+      if (!newEl.isEqualNode(curEl)) {
+        [...newEl.attributes].forEach(attr =>
+          curEl.setAttribute(attr.name, attr.value)
+        );
       }
     });
   }

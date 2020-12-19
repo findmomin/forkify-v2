@@ -10,12 +10,13 @@ export class Recipe implements Interfaces.Recipe {
   servings!: number;
   source_url!: string;
   title!: string;
+  isBookmarked = false;
 
   constructor(public id: string) {
     //
   }
 
-  async getRecipe() {
+  async getRecipe(bookmarks: Interfaces.Recipe[]) {
     try {
       // Getting the recipe
       const json = await getJSON(`${config.API_URL}${this.id}`);
@@ -33,6 +34,9 @@ export class Recipe implements Interfaces.Recipe {
       this.servings = recipe.servings;
       this.source_url = recipe.source_url;
       this.title = recipe.title;
+      this.isBookmarked = bookmarks?.some(recipe => recipe.id === this.id)
+        ? true
+        : false;
     } catch (err) {
       throw err;
     }

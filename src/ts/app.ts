@@ -2,12 +2,13 @@
 import '../sass/main.scss';
 import { Recipe } from './models/Recipe';
 import { Search } from './models/Search';
+import { Bookmark } from './models/Bookmarks';
 import RecipeView from './view/recipeView';
 import SearchView from './view/searchView';
 import PaginationView from './view/paginationView';
 
 // The state
-const state: { recipe?: Recipe; search?: Search } = {};
+const state: { recipe?: Recipe; search?: Search; bookmark?: Bookmark } = {};
 
 // The search controller
 const controlSearch = async (e: Event) => {
@@ -50,11 +51,8 @@ const controlRecipes = async () => {
     // If no id then return
     if (!recipeId) return;
 
-    // Update the search results view
-    const clickedResultIndex = state.search
-      ?.getSearchResultsPage(state.search!.currentPage)
-      .findIndex(el => el.id === recipeId);
-    SearchView.highlightResult(clickedResultIndex!);
+    // Update the search results view (highlight the selected one)
+    SearchView.update(state.search?.getSearchResultsPage()!);
 
     // Render the spinner while getting recipe
     RecipeView.renderSpinner();
@@ -63,7 +61,7 @@ const controlRecipes = async () => {
     state.recipe = new Recipe(recipeId);
 
     // Getting the recipe details
-    await state.recipe.getRecipe();
+    await state.recipe.getRecipe(state.bookmark?.bookmarks!);
 
     // Rendering the recipe
     RecipeView.render(state.recipe);
@@ -107,6 +105,27 @@ const controlServings = (e: Event) => {
   RecipeView.update(state.recipe!);
 };
 
+// The bookmark controller
+const controlBookmark = (e: Event) => {
+  const target = (e.target as HTMLElement).closest(
+    '.btn--bookmark'
+  ) as HTMLButtonElement;
+
+  if (!target) return;
+
+  // Creating the bookmark object
+  state.bookmark ? null : (state.bookmark = new Bookmark());
+
+  // If the recipe isn't bookmarked, bookmark it
+  // If it is bookmarked, un-bookmark it
+  state.recipe?.isBookmarked
+    ? state.bookmark.removeBookmark(state.recipe!)
+    : state.bookmark.addBookmark(state.recipe!);
+
+  // Re-render the recipe
+  RecipeView.render(state.recipe!);
+};
+
 // App initializer
 const init = async () => {
   // Handler for the search
@@ -118,6 +137,9 @@ const init = async () => {
 
   // Handler for the pagination btns click
   PaginationView.addHandlerClick(controlPagination);
+
+  // Handler for the bookmark btn
+  RecipeView.addHandlerAddBookmark(controlBookmark);
 };
 
 init();

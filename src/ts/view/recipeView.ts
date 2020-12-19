@@ -16,6 +16,10 @@ export class RecipeView extends View {
     this.parentEl.addEventListener('click', handlerFn);
   }
 
+  addHandlerAddBookmark(handlerFn: (e: Event) => void) {
+    this.parentEl.addEventListener('click', handlerFn);
+  }
+
   generateMarkup() {
     const data = this.data as Interfaces.Recipe;
     return `
@@ -57,9 +61,11 @@ export class RecipeView extends View {
             </div>
          </div>
          <div class="recipe__user-generated"></div>
-         <button class="btn--round">
+         <button class="btn--round btn--bookmark">
             <svg class="">
-               <use href="img/icons.svg#icon-bookmark-fill"></use>
+               <use href="img/icons.svg#icon-bookmark${
+                 (this.data as Interfaces.Recipe).isBookmarked ? '-fill' : ''
+               }"></use>
             </svg>
          </button>
       </div>
