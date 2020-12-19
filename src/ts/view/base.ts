@@ -8,4 +8,15 @@ export const elements = {
   bookmarksContainer: document.querySelector(
     '.bookmarks__list'
   ) as HTMLUListElement,
+  addRecipeForm: document.querySelector('.upload') as HTMLFormElement,
+  addRecipeOpenButton: document.querySelector(
+    '.nav__btn--add-recipe'
+  ) as HTMLButtonElement,
+  addRecipeCloseButton: document.querySelector(
+    '.btn--close-modal'
+  ) as HTMLButtonElement,
+  addRecipeOverlay: document.querySelector('.overlay') as HTMLDivElement,
+  addRecipeWindow: document.querySelector(
+    '.add-recipe-window'
+  ) as HTMLDivElement,
 };

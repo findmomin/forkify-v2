@@ -7,6 +7,7 @@ import RecipeView from './view/recipeView';
 import SearchView from './view/searchView';
 import BookmarksView from './view/bookmarksView';
 import PaginationView from './view/paginationView';
+import AddRecipeView from './view/addRecipeView';
 
 // The state
 const state: { recipe?: Recipe; search?: Search; bookmark: Bookmark } = {
@@ -135,6 +136,11 @@ const controlBookmark = (e: Event) => {
   BookmarksView.render(state.bookmark.bookmarks);
 };
 
+// The add recipe handler
+const controlAddRecipe = (data: {}) => {
+  console.log(data);
+};
+
 // App initializer
 const init = async () => {
   // Handler for the search
@@ -152,6 +158,12 @@ const init = async () => {
 
   // If theres bookmarks, then render them
   BookmarksView.render(state.bookmark.bookmarks);
+
+  // Add & close btns handler of the add recipe
+  AddRecipeView;
+
+  // The recipe upload handler
+  AddRecipeView.addHandlerUpload(controlAddRecipe);
 };
 
 init();
