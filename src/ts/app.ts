@@ -123,7 +123,7 @@ const controlBookmark = (e: Event) => {
     : state.bookmark.addBookmark(state.recipe!);
 
   // Re-render the recipe
-  RecipeView.render(state.recipe!);
+  RecipeView.update(state.recipe!);
 };
 
 // App initializer
