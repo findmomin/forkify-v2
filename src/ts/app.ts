@@ -11,8 +11,9 @@ import PaginationView from './view/paginationView';
 import AddRecipeView from './view/addRecipeView';
 
 // The state
-const state: { recipe: Recipe; search?: Search; bookmark: Bookmark } = {
+const state: { recipe: Recipe; search: Search; bookmark: Bookmark } = {
   bookmark: new Bookmark(),
+  search: new Search(''),
   recipe: new Recipe(location.hash.slice(1)),
 };
 
@@ -193,11 +194,36 @@ const init = async () => {
   // If theres bookmarks, then render them
   BookmarksView.render(state.bookmark.bookmarks);
 
-  // Add & close btns handler of the add recipe
-  AddRecipeView;
-
+  // Add & close btns handler of the add recipe &
   // The recipe upload handler
   AddRecipeView.addHandlerUpload(controlAddRecipe);
+
+  // Render the spinner while getting recipe
+  SearchView.renderSpinner();
+
+  // Make a random search and display the results &
+  // Render the first recipe of the result
+  await state.search.getRandomResults();
+
+  // Rendering the results
+  SearchView.render(
+    state.search.getSearchResultsPage(state.search.currentPage)
+  );
+
+  // Rendering the initial pagination buttons
+  PaginationView.render(state.search);
+
+  // Rendering the first recipe
+  // Render the spinner while getting recipe
+  RecipeView.renderSpinner();
+
+  // Getting the recipe details
+  // Settig the recipe id to the first recipe of the result
+  state.recipe.id = state.search.results[0].id;
+  await state.recipe.getRecipe(state.bookmark.bookmarks);
+
+  // Rendering the recipe
+  RecipeView.render(state.recipe.recipe);
 };
 
 init();
