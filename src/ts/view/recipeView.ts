@@ -21,7 +21,7 @@ export class RecipeView extends View {
   }
 
   generateMarkup() {
-    const data = this.data as Interfaces.Recipe;
+    const data = this.data as Interfaces.Recipe | Interfaces.UserRecipe;
     return `
       <figure class="recipe__fig">
          <img src="${data.image_url}" alt="${data.title}" class="recipe__img" />
@@ -60,7 +60,17 @@ export class RecipeView extends View {
                </button>
             </div>
          </div>
-         <div class="recipe__user-generated"></div>
+         <div class="recipe__user-generated">
+         ${
+           (data as Interfaces.UserRecipe).key
+             ? `
+         <svg>
+            <use href="img/icons.svg#icon-user"></use>
+         </svg>
+         `
+             : ''
+         }
+         </div>
          <button class="btn--round btn--bookmark">
             <svg class="">
                <use href="img/icons.svg#icon-bookmark${

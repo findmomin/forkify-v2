@@ -1,4 +1,3 @@
-// import * as Interfaces from '../Interfaces';
 import { elements } from './base';
 import View from './View';
 
@@ -8,8 +7,8 @@ class AddRecipeView extends View {
   closeBtn = elements.addRecipeCloseButton;
   overlay = elements.addRecipeOverlay;
   window = elements.addRecipeWindow;
-  errorMessage = '';
-  message = '';
+  errorMessage = 'Invalid ingredient format! Please use the correct format';
+  message = 'Your recipe was successfully uploaded :)';
 
   constructor() {
     super();
@@ -32,7 +31,9 @@ class AddRecipeView extends View {
     );
   }
 
-  addHandlerUpload(handlerFn: (formData: {}) => void) {
+  addHandlerUpload(
+    handlerFn: (formData: { [k: string]: FormDataEntryValue }) => void
+  ) {
     this.parentEl.addEventListener('submit', function (e: Event) {
       e.preventDefault();
 

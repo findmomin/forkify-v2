@@ -16,11 +16,17 @@ export const generateMarkup = (recipes: Interfaces.RecipePartial[]) => {
          <div class="preview__data">
            <h4 class="preview__title">${recipe.title}</h4>
            <p class="preview__publisher">${recipe.publisher}</p>
-           <div class="preview__user-generated hidden">
+           ${
+             (recipe as Interfaces.UserRecipe).key
+               ? `
+          <div class="preview__user-generated">
              <svg>
                <use href="img/icons.svg#icon-user"></use>
              </svg>
            </div>
+          `
+               : ''
+           }
          </div>
        </a>
      </li>

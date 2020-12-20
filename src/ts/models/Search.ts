@@ -14,7 +14,7 @@ export class Search {
     try {
       // Getting the search results
       const json = await getJSON(
-        `${config.API_URL}?search=${this.searchQuery}`
+        `${config.API_URL}?search=${this.searchQuery}&key=${config.API_KEY}`
       );
 
       // Pulling the recipes array from the results

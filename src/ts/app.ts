@@ -1,5 +1,6 @@
 // Module imports
 import '../sass/main.scss';
+import * as config from './config';
 import { Recipe } from './models/Recipe';
 import { Search } from './models/Search';
 import { Bookmark } from './models/Bookmarks';
@@ -10,8 +11,9 @@ import PaginationView from './view/paginationView';
 import AddRecipeView from './view/addRecipeView';
 
 // The state
-const state: { recipe?: Recipe; search?: Search; bookmark: Bookmark } = {
+const state: { recipe: Recipe; search?: Search; bookmark: Bookmark } = {
   bookmark: new Bookmark(),
+  recipe: new Recipe(location.hash.slice(1)),
 };
 
 // The search controller
@@ -59,7 +61,7 @@ const controlRecipes = async () => {
     SearchView.update(state.search?.getSearchResultsPage()!);
 
     // Update the bookmarks (highlight the selected one)
-    BookmarksView.render(state.bookmark?.bookmarks!);
+    BookmarksView.render(state.bookmark.bookmarks!);
 
     // Render the spinner while getting recipe
     RecipeView.renderSpinner();
@@ -68,10 +70,10 @@ const controlRecipes = async () => {
     state.recipe = new Recipe(recipeId);
 
     // Getting the recipe details
-    await state.recipe.getRecipe(state.bookmark?.bookmarks!);
+    await state.recipe.getRecipe(state.bookmark.bookmarks);
 
     // Rendering the recipe
-    RecipeView.render(state.recipe);
+    RecipeView.render(state.recipe.recipe);
   } catch (err) {
     console.log(err);
     RecipeView.renderError();
@@ -106,10 +108,12 @@ const controlServings = (e: Event) => {
   if (!btn) return;
 
   // Update the servings in the state
-  state.recipe!.updateServings(state.recipe!.servings + +btn.dataset.value!);
+  state.recipe!.updateServings(
+    state.recipe.recipe.servings + +btn.dataset.value!
+  );
 
   // Update the view (re-render)
-  RecipeView.update(state.recipe!);
+  RecipeView.update(state.recipe.recipe);
 };
 
 // The bookmark controller
@@ -125,20 +129,50 @@ const controlBookmark = (e: Event) => {
 
   // If the recipe isn't bookmarked, bookmark it
   // If it is bookmarked, un-bookmark it
-  state.recipe?.isBookmarked
-    ? state.bookmark.removeBookmark(state.recipe!)
-    : state.bookmark.addBookmark(state.recipe!);
+  state.recipe.recipe.isBookmarked
+    ? state.bookmark.removeBookmark(state.recipe.recipe)
+    : state.bookmark.addBookmark(state.recipe.recipe);
 
   // Re-render the recipe
-  RecipeView.update(state.recipe!);
+  RecipeView.update(state.recipe.recipe);
 
   // Render bookmarked recipes into the bookmarks
   BookmarksView.render(state.bookmark.bookmarks);
 };
 
 // The add recipe handler
-const controlAddRecipe = (data: {}) => {
-  console.log(data);
+const controlAddRecipe = async (formData: {
+  [k: string]: FormDataEntryValue;
+}) => {
+  try {
+    // Show the spinner while data comes back
+    AddRecipeView.renderSpinner();
+
+    // Add the uploaded recipe to the state
+    await state.recipe.uploadRecipe(formData);
+
+    // Bookmak the recipe
+    state.bookmark.addBookmark(state.recipe.recipe);
+
+    // Re-render the recipe
+    RecipeView.render(state.recipe.recipe);
+
+    // Render bookmarked recipes into the bookmarks
+    BookmarksView.render(state.bookmark.bookmarks);
+
+    // Change the url hash (in case its a user recipe)
+    history.pushState(null, '', `#${state.recipe.recipe.id}`);
+
+    // Display a success message
+    AddRecipeView.renderMessage();
+
+    // Close the recipe editor
+    setTimeout(() => {
+      AddRecipeView.toggleRecipeEditor();
+    }, config.MODAL_CLOSE_SEC * 1000);
+  } catch (err) {
+    AddRecipeView.renderError();
+  }
 };
 
 // App initializer

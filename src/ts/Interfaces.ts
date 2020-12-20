@@ -26,9 +26,15 @@ export interface Recipe {
   isBookmarked: boolean;
 }
 
+export interface UserRecipe extends Recipe {
+  createdAt: string;
+  key: string;
+}
+
 export interface RecipePartial {
   id: string;
   image_url: string;
   publisher: string;
   title: string;
+  // key: string;
 }
