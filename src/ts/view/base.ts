@@ -19,4 +19,5 @@ export const elements = {
   addRecipeWindow: document.querySelector(
     '.add-recipe-window'
   ) as HTMLDivElement,
+  homeLink: document.querySelector('.home-link') as HTMLLinkElement,
 };

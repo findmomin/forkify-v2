@@ -9,6 +9,7 @@ import SearchView from './view/searchView';
 import BookmarksView from './view/bookmarksView';
 import PaginationView from './view/paginationView';
 import AddRecipeView from './view/addRecipeView';
+import { elements } from './view/base';
 
 // The state
 const state: { recipe: Recipe; search: Search; bookmark: Bookmark } = {
@@ -81,7 +82,7 @@ const controlRecipes = async () => {
   }
 };
 
-// Pagination buttons controler
+// Pagination buttons controller
 const controlPagination = (e: Event) => {
   const btn = (e.target as HTMLElement).closest(
     '.btn--inline'
@@ -99,7 +100,7 @@ const controlPagination = (e: Event) => {
   PaginationView.render(state.search!);
 };
 
-// Update servings buttons controler
+// Update servings buttons controller
 const controlServings = (e: Event) => {
   const btn = (e.target as HTMLElement).closest(
     '.btn--tiny'
@@ -152,7 +153,7 @@ const controlAddRecipe = async (formData: {
     // Add the uploaded recipe to the state
     await state.recipe.uploadRecipe(formData);
 
-    // Bookmak the recipe
+    // Bookmark the recipe
     state.bookmark.addBookmark(state.recipe.recipe);
 
     // Re-render the recipe
@@ -178,6 +179,41 @@ const controlAddRecipe = async (formData: {
 
 // App initializer
 const init = async () => {
+  elements.homeLink.addEventListener('click', async e => {
+    e.preventDefault();
+
+    history.pushState(null, '', '/');
+
+    state.search = new Search('');
+
+    // Render search spinner
+    SearchView.renderSpinner();
+
+    // Make a random search and display the results &
+    // Render the first recipe of the result
+    await state.search.getRandomResults();
+
+    // Rendering the results
+    SearchView.render(
+      state.search.getSearchResultsPage(state.search.currentPage)
+    );
+
+    // Rendering the initial pagination buttons
+    PaginationView.render(state.search);
+
+    // Rendering the first recipe
+    // Render the spinner while getting recipe
+    RecipeView.renderSpinner();
+
+    // Getting the recipe details
+    // Setting the recipe id to the first recipe of the result
+    state.recipe.id = state.search.results[0].id;
+    await state.recipe.getRecipe(state.bookmark.bookmarks);
+
+    // Rendering the recipe
+    RecipeView.render(state.recipe.recipe);
+  });
+
   // Handler for the search
   SearchView.addHandlerSearch(controlSearch);
 
@@ -218,7 +254,7 @@ const init = async () => {
   RecipeView.renderSpinner();
 
   // Getting the recipe details
-  // Settig the recipe id to the first recipe of the result
+  // Setting the recipe id to the first recipe of the result
   state.recipe.id = state.search.results[0].id;
   await state.recipe.getRecipe(state.bookmark.bookmarks);
 
